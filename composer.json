@@ -1,0 +1,26 @@
+{
+    "name": "fyre/queue",
+    "description": "A Queue library.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "elusivecodes",
+            "email": "elusivecodes@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Fyre\\Queue\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "fyre/filesystem": "^1.0",
+        "phpunit/phpunit": "^9"
+    }
+}
