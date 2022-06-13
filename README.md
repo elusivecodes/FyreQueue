@@ -41,9 +41,9 @@ QueueManager::clear();
 
 **Get Config**
 
-Set a queue config.
+Set a [*Queue*](#queues) config.
 
-- `$key` is a string representing the queue key.
+- `$key` is a string representing the [*Queue*](#queues) key.
 
 ```php
 $config = QueueManager::getConfig($key);
@@ -57,7 +57,7 @@ $config = QueueManager::getConfig();
 
 **Get Key**
 
-Get the key for a queue instance.
+Get the key for a [*Queue*](#queues) instance.
 
 - `$queue` is a [*Queue*](#queues).
 
@@ -67,7 +67,7 @@ $key = QueueManager::getKey($queue);
 
 **Load**
 
-Load a queue.
+Load a [*Queue*](#queues).
 
 - `$options` is an array containing configuration options.
 
@@ -77,13 +77,13 @@ $queue = QueueManager::load($options);
 
 **Push**
 
-Push a job to the queue.
+Push a job to a [*Queue*](#queues).
 
 - `$className` is a string representing the job class.
 - `$arguments` is an array containing arguments that will be passed to the job.
 - `$options` is an array containing options for the [*Message*](#messages).
     - `config` is a string representing the configuration key, and will default to "*default*".
-    - `queue` is a string representing the queue name, and will default to "*default*".
+    - `queue` is a string representing the [*Queue*](#queues) name, and will default to "*default*".
     - `method` is a string representing the class method, and will default to "*run*".
     - `delay` is a number representing the number of seconds before the job should run, and will default to *0*.
     - `expires` is a number representing the number of seconds after which the job will expire, and will default to *0*.
@@ -94,9 +94,9 @@ QueueManager::push($className, $arguments, $options);
 
 **Set Config**
 
-Set the queue config.
+Set the [*Queue*](#queues) config.
 
-- `$key` is a string representing the queue key.
+- `$key` is a string representing the [*Queue*](#queues) key.
 - `$options` is an array containing configuration options.
 
 ```php
@@ -111,9 +111,9 @@ QueueManager::setConfig($config);
 
 **Use**
 
-Load a shared queue instance.
+Load a shared [*Queue*](#queues) instance.
 
-- `$key` is a string representing the queue key, and will default to *"default"*.
+- `$key` is a string representing the [*Queue*](#queues) key, and will default to *"default"*.
 
 ```php
 $queue = QueueManager::use($key);
