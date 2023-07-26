@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\Queue\Exceptions\QueueException,
-    Fyre\Queue\Handlers\RedisQueue,
-    Fyre\Queue\QueueManager,
-    PHPUnit\Framework\TestCase;
+use Fyre\Queue\Exceptions\QueueException;
+use Fyre\Queue\Handlers\RedisQueue;
+use Fyre\Queue\QueueManager;
+use PHPUnit\Framework\TestCase;
 
 final class QueueManagerTest extends TestCase
 {
@@ -17,6 +16,9 @@ final class QueueManagerTest extends TestCase
         $this->assertSame(
             [
                 'default' => [
+                    'className' => RedisQueue::class
+                ],
+                'other' => [
                     'className' => RedisQueue::class
                 ]
             ],
@@ -53,6 +55,31 @@ final class QueueManagerTest extends TestCase
         $this->assertSame(
             null,
             QueueManager::getKey($handler)
+        );
+    }
+
+    public function testIsLoaded(): void
+    {
+        QueueManager::use();
+        
+        $this->assertTrue(
+            QueueManager::isLoaded()
+        );
+    }
+
+    public function testIsLoadedKey(): void
+    {
+        QueueManager::use('other');
+        
+        $this->assertTrue(
+            QueueManager::isLoaded('other')
+        );
+    }
+
+    public function testIsLoadedInvalid(): void
+    {
+        $this->assertFalse(
+            QueueManager::isLoaded('test')
         );
     }
 
@@ -100,6 +127,45 @@ final class QueueManagerTest extends TestCase
         ]);
     }
 
+    public function testUnload(): void
+    {
+        QueueManager::use();
+
+        $this->assertTrue(
+            QueueManager::unload()
+        );
+
+        $this->assertFalse(
+            QueueManager::isLoaded()
+        );
+        $this->assertFalse(
+            QueueManager::hasConfig()
+        );
+    }
+
+    public function testUnloadKey(): void
+    {
+        QueueManager::use('other');
+
+        $this->assertTrue(
+            QueueManager::unload('other')
+        );
+
+        $this->assertFalse(
+            QueueManager::isLoaded('other')
+        );
+        $this->assertFalse(
+            QueueManager::hasConfig('other')
+        );
+    }
+
+    public function testUnloadInvalid(): void
+    {
+        $this->assertFalse(
+            QueueManager::unload('test')
+        );
+    }
+
     public function testUse(): void
     {
         $handler1 = QueueManager::use();
@@ -116,8 +182,14 @@ final class QueueManagerTest extends TestCase
     protected function setUp(): void
     {
         QueueManager::clear();
-        QueueManager::setConfig('default', [
-            'className' => RedisQueue::class
+
+        QueueManager::setConfig([
+            'default' => [
+                'className' => RedisQueue::class
+            ],
+            'other' => [
+                'className' => RedisQueue::class
+            ]
         ]);
     }
 

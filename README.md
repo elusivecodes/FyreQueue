@@ -1,6 +1,6 @@
 # FyreQueue
 
-**FyreQueue** is a free, queue library for *PHP*.
+**FyreQueue** is a free, open-source queue library for *PHP*.
 
 
 ## Table Of Contents
@@ -65,6 +65,26 @@ Get the key for a [*Queue*](#queues) instance.
 $key = QueueManager::getKey($queue);
 ```
 
+**Has Config**
+
+Check if a [*Queue*](#queues) config exists.
+
+- `$key` is a string representing the [*Queue*](#queues) key, and will default to `QueueManager::DEFAULT`.
+
+```php
+$hasConfig = QueueManager::hasConfig($key);
+```
+
+**Is Loaded**
+
+Check if a [*Queue*](#queues) instance is loaded.
+
+- `$key` is a string representing the [*Queue*](#queues) key, and will default to `QueueManager::DEFAULT`.
+
+```php
+$isLoaded = QueueManager::isLoaded($key);
+```
+
 **Load**
 
 Load a [*Queue*](#queues).
@@ -107,6 +127,16 @@ Alternatively, a single array can be provided containing key/value of configurat
 
 ```php
 QueueManager::setConfig($config);
+```
+
+**Unload**
+
+Unload a [*Queue*](#queues).
+
+- `$key` is a string representing the [*Queue*](#queues) key, and will default to `QueueManager::DEFAULT`.
+
+```php
+$unloaded = QueueManager::unload($key);
 ```
 
 **Use**

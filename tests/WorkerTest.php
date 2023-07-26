@@ -3,14 +3,13 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\FileSystem\File,
-    Fyre\FileSystem\Folder,
-    Fyre\Queue\Handlers\RedisQueue,
-    Fyre\Queue\QueueManager,
-    Fyre\Queue\Worker,
-    PHPUnit\Framework\TestCase,
-    Tests\Mock\MockJob;
+use Fyre\FileSystem\File;
+use Fyre\FileSystem\Folder;
+use Fyre\Queue\Handlers\RedisQueue;
+use Fyre\Queue\QueueManager;
+use Fyre\Queue\Worker;
+use PHPUnit\Framework\TestCase;
+use Tests\Mock\MockJob;
 
 final class WorkerTest extends TestCase
 {

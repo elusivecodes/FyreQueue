@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
-use
-    Fyre\Queue\Exceptions\QueueException;
+use Fyre\Queue\Exceptions\QueueException;
 
-use function
-    array_key_exists,
-    array_search,
-    class_exists,
-    is_array,
-    time;
+use function array_key_exists;
+use function array_search;
+use function class_exists;
+use function is_array;
+use function time;
 
 /**
  * QueueManager
  */
 abstract class QueueManager
 {
+
+    public const DEFAULT = 'default';
 
     protected static array $config = [];
 
@@ -54,6 +54,26 @@ abstract class QueueManager
     public static function getKey(Queue $queue): string|null
     {
         return array_search($queue, static::$instances, true) ?: null;
+    }
+
+    /**
+     * Determine if a config exists.
+     * @param string $key The config key.
+     * @return bool TRUE if the config exists, otherwise FALSE.
+     */
+    public static function hasConfig(string $key = self::DEFAULT): bool
+    {
+        return array_key_exists($key, static::$config);
+    }
+
+    /**
+     * Determine if a handler is loaded.
+     * @param string $key The config key.
+     * @return bool TRUE if the handler is loaded, otherwise FALSE.
+     */
+    public static function isLoaded(string $key = self::DEFAULT): bool
+    {
+        return array_key_exists($key, static::$instances);
     }
 
     /**
@@ -120,11 +140,28 @@ abstract class QueueManager
     }
 
     /**
+     * Unload a handler.
+     * @param string $key The config key.
+     * @return bool TRUE if the handler was removed, otherwise FALSE.
+     */
+    public static function unload(string $key = self::DEFAULT): bool
+    {
+        if (!array_key_exists($key, static::$config)) {
+            return false;
+        }
+
+        unset(static::$instances[$key]);
+        unset(static::$config[$key]);
+
+        return true;
+    }
+
+    /**
      * Load a shared handler instance.
      * @param string $key The config key.
      * @return Queue The handler.
      */
-    public static function use(string $key = 'default'): Queue
+    public static function use(string $key = self::DEFAULT): Queue
     {
         return static::$instances[$key] ??= static::load(static::$config[$key] ?? []);
     }

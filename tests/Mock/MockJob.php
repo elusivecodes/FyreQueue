@@ -2,12 +2,10 @@
 
 namespace Tests\Mock;
 
-use
-    Fyre\FileSystem\File,
-    RuntimeException;
+use Fyre\FileSystem\File;
+use RuntimeException;
 
-use function
-    json_encode;
+use function json_encode;
 
 class MockJob
 {

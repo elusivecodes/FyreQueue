@@ -3,20 +3,18 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use
-    Fyre\FileSystem\File,
-    Fyre\FileSystem\Folder,
-    Fyre\Queue\Handlers\RedisQueue,
-    Fyre\Queue\Message,
-    Fyre\Queue\QueueManager,
-    Fyre\Queue\Worker,
-    PHPUnit\Framework\TestCase,
-    RuntimeException,
-    Tests\Mock\MockJob,
-    Tests\Mock\MockListener;
+use Fyre\FileSystem\File;
+use Fyre\FileSystem\Folder;
+use Fyre\Queue\Handlers\RedisQueue;
+use Fyre\Queue\Message;
+use Fyre\Queue\QueueManager;
+use Fyre\Queue\Worker;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use Tests\Mock\MockJob;
+use Tests\Mock\MockListener;
 
-use function
-    unserialize;
+use function unserialize;
 
 final class ListenerTest extends TestCase
 {

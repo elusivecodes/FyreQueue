@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Queue\Exceptions;
 
-use
-    RuntimeException;
+use RuntimeException;
 
 /**
  * QueueException

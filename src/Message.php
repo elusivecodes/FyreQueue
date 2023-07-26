@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
-use
-    Closure;
+use Closure;
 
-use function
-    class_exists,
-    method_exists,
-    time;
+use function class_exists;
+use function method_exists;
+use function time;
 
 /**
  * Message

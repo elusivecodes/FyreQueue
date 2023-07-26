@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
-use
-    Fyre\Queue\Exceptions\QueueException;
+use Fyre\Queue\Exceptions\QueueException;
 
-use function
-    array_replace_recursive,
-    class_exists,
-    is_a;
+use function array_replace_recursive;
+use function class_exists;
+use function is_a;
 
 /**
  * Queue

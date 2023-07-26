@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
-use
-    Throwable;
+use Throwable;
 
 /**
  * Listener

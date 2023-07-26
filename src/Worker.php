@@ -3,13 +3,11 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
-use
-    Throwable;
+use Throwable;
 
-use function
-    array_replace_recursive,
-    time,
-    usleep;
+use function array_replace_recursive;
+use function time;
+use function usleep;
 
 /**
  * Worker

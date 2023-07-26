@@ -3,16 +3,14 @@ declare(strict_types=1);
 
 namespace Fyre\Queue\Handlers;
 
-use
-    Fyre\Queue\Exceptions\QueueException,
-    Fyre\Queue\Message,
-    Fyre\Queue\Queue,
-    Redis,
-    RedisException;
+use Fyre\Queue\Exceptions\QueueException;
+use Fyre\Queue\Message;
+use Fyre\Queue\Queue;
+use Redis;
+use RedisException;
 
-use function
-    serialize,
-    unserialize;
+use function serialize;
+use function unserialize;
 
 /**
  * RedisQueue

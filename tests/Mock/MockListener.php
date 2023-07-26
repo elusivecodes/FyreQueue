@@ -2,14 +2,12 @@
 
 namespace Tests\Mock;
 
-use
-    Fyre\FileSystem\File,
-    Fyre\Queue\Listener,
-    Fyre\Queue\Message,
-    Throwable;
+use Fyre\FileSystem\File;
+use Fyre\Queue\Listener;
+use Fyre\Queue\Message;
+use Throwable;
 
-use function
-    serialize;
+use function serialize;
 
 class MockListener extends Listener
 {
