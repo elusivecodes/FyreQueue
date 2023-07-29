@@ -5,7 +5,7 @@ namespace Fyre\Queue;
 
 use Fyre\Queue\Exceptions\QueueException;
 
-use function array_replace_recursive;
+use function array_replace;
 use function class_exists;
 use function is_a;
 
@@ -29,7 +29,7 @@ abstract class Queue
      */
     public function __construct(array $options = [])
     {
-        $this->config = array_replace_recursive(self::$defaults, static::$defaults, $options);
+        $this->config = array_replace(self::$defaults, static::$defaults, $options);
 
         if (!class_exists($this->config['listener']) || !is_a($this->config['listener'], Listener::class, true)) {
             throw QueueException::forInvalidListener($this->config['listener']);

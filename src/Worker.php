@@ -5,7 +5,7 @@ namespace Fyre\Queue;
 
 use Throwable;
 
-use function array_replace_recursive;
+use function array_replace;
 use function time;
 use function usleep;
 
@@ -38,7 +38,7 @@ class Worker
      */
     public function __construct(array $options = [])
     {
-        $this->config = array_replace_recursive(self::$defaults, static::$defaults, $options);
+        $this->config = array_replace(self::$defaults, static::$defaults, $options);
 
         $this->queue = QueueManager::use($this->config['config']);
         $this->listener = $this->queue->getListener();

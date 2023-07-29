@@ -35,7 +35,7 @@ class Message
      */
     public function __construct(array $options = [])
     {
-        $this->config = array_replace_recursive(self::$defaults, static::$defaults, $options);
+        $this->config = array_replace(self::$defaults, static::$defaults, $options);
 
         if ($this->config['expires']) {
             $this->config['before'] ??= time() + $this->config['expires'];
