@@ -9,7 +9,6 @@ use function array_key_exists;
 use function array_search;
 use function class_exists;
 use function is_array;
-use function time;
 
 /**
  * QueueManager
