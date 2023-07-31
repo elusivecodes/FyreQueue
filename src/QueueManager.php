@@ -79,7 +79,7 @@ abstract class QueueManager
      * Load a handler.
      * @param array $options Options for the handler.
      * @return Queue The handler.
-     * @throws QueueException if the handler is invalid.
+     * @throws QueueException if the handler is not valid.
      */
     public static function load(array $options = []): Queue
     {
@@ -115,7 +115,7 @@ abstract class QueueManager
      * Set handler config.
      * @param string|array $key The config key.
      * @param array|null $options The config options.
-     * @throws QueueException if the config is invalid.
+     * @throws QueueException if the config is not valid.
      */
     public static function setConfig(string|array $key, array|null $options = null): void
     {

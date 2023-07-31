@@ -31,6 +31,7 @@ class RedisQueue extends Queue
     /**
      * New Queue constructor.
      * @param array $options The queue options.
+     * @throws QueueException if the connection is not valid.
      */
     public function __construct(array $options)
     {

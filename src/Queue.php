@@ -26,6 +26,7 @@ abstract class Queue
     /**
      * New Queue constructor.
      * @param array $options The queue options.
+     * @throws QueueException if the listener is not valid.
      */
     public function __construct(array $options = [])
     {
