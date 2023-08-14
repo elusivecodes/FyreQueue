@@ -11,47 +11,47 @@ use RuntimeException;
 class QueueException extends RuntimeException
 {
 
-    public static function forAuthFailed()
+    public static function forAuthFailed(): static
     {
         return new static('Queue handler authentication failed');
     }
 
-    public static function forConfigExists(string $key)
+    public static function forConfigExists(string $key): static
     {
         return new static('Queue handler config already exists: '.$key);
     }
 
-    public static function forConnectionError(string $message = '')
+    public static function forConnectionError(string $message = ''): static
     {
         return new static('Queue handler connection error: '.$message);
     }
 
-    public static function forConnectionFailed()
+    public static function forConnectionFailed(): static
     {
         return new static('Queue handler connection failed');
     }
 
-    public static function forInvalidClass(string $className = '')
+    public static function forInvalidClass(string $className = ''): static
     {
         return new static('Queue handler class not found: '.$className);
     }
 
-    public static function forInvalidConfig(string $key)
+    public static function forInvalidConfig(string $key): static
     {
         return new static('Queue handler invalid config: '.$key);
     }
 
-    public static function forInvalidDatabase(string $database)
+    public static function forInvalidDatabase(string $database): static
     {
         return new static('Queue handler invalid database: '.$database);
     }
 
-    public static function forInvalidKey(string $key)
+    public static function forInvalidKey(string $key): static
     {
         return new static('Queue handler invalid key: '.$key);
     }
 
-    public static function forInvalidListener(string $listener)
+    public static function forInvalidListener(string $listener): static
     {
         return new static('Queue handler invalid listener: '.$listener);
     }

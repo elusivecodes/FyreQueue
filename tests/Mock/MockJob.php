@@ -10,19 +10,19 @@ use function json_encode;
 class MockJob
 {
 
-    public static function run(array $arguments = [])
+    public static function run(array $arguments = []): void
     {
         (new File('tmp/job', true))
             ->open('a')
             ->write(json_encode($arguments)."\r\n");
     }
 
-    public static function fail()
+    public static function fail(): false
     {
         return false;
     }
 
-    public static function error()
+    public static function error(): void
     {
         throw new RuntimeException;
     }
