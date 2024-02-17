@@ -6,6 +6,10 @@ namespace Fyre\Queue;
 use Closure;
 
 use function class_exists;
+use function implode;
+use function json_encode;
+use function ksort;
+use function md5;
 use function method_exists;
 use function time;
 
@@ -24,7 +28,8 @@ class Message
         'expires' => 0,
         'delay' => 0,
         'after' => null,
-        'before' => null
+        'before' => null,
+        'unique' => false
     ];
 
     protected array $config;
@@ -77,6 +82,25 @@ class Message
     }
 
     /**
+     * Get the message hash.
+     * @return string The message hash.
+     */
+    public function getHash(): string
+    {
+        $arguments = $this->config['arguments'];
+
+        ksort($arguments);
+
+        $hashInput = implode([
+            $this->config['className'],
+            $this->config['method'],
+            json_encode($arguments)
+        ]);
+
+        return md5($hashInput);
+    }
+
+    /**
      * Determine if the message has expired.
      * @return bool TRUE if the message has expired, otherwise FALSE.
      */
@@ -100,6 +124,15 @@ class Message
         }
 
         return $this->config['after'] < time();
+    }
+
+    /**
+     * Determine if the message is unique.
+     * @return bool TRUE if the message is unique, otherwise FALSE.
+     */
+    public function isUnique(): bool
+    {
+        return $this->config['unique'];
     }
 
     /**

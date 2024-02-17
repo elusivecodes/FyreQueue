@@ -347,6 +347,14 @@ Get the message config.
 $config = $message->getConfig();
 ```
 
+**Get Hash**
+
+Get the message hash.
+
+```php
+$hash = $message->getHash();
+```
+
 **Is Expired**
 
 Determine if the message has expired.
@@ -361,6 +369,14 @@ Determine if the message is ready.
 
 ```php
 $isReady = $message->isReady();
+```
+
+**Is Unique**
+
+Determine if the message is unique.
+
+```php
+$isUnique = $message->isUnique();
 ```
 
 **Is Valid**

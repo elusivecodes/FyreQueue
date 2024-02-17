@@ -48,7 +48,8 @@ final class ListenerTest extends TestCase
                 'config' => 'default',
                 'queue' => 'default',
                 'after' => null,
-                'before' => null
+                'before' => null,
+                'unique' => false
             ],
             $message->getConfig()
         );
@@ -71,7 +72,8 @@ final class ListenerTest extends TestCase
                 'config' => 'default',
                 'queue' => 'default',
                 'after' => null,
-                'before' => null
+                'before' => null,
+                'unique' => false
             ],
             $message->getConfig()
         );
@@ -108,7 +110,8 @@ final class ListenerTest extends TestCase
                 'config' => 'default',
                 'queue' => 'default',
                 'after' => null,
-                'before' => null
+                'before' => null,
+                'unique' => false
             ],
             $message->getConfig()
         );
@@ -147,7 +150,8 @@ final class ListenerTest extends TestCase
                 'config' => 'default',
                 'queue' => 'default',
                 'after' => null,
-                'before' => null
+                'before' => null,
+                'unique' => false
             ],
             $message->getConfig()
         );
@@ -187,7 +191,8 @@ final class ListenerTest extends TestCase
                 'config' => 'default',
                 'queue' => 'default',
                 'after' => null,
-                'before' => null
+                'before' => null,
+                'unique' => false
             ],
             $message->getConfig()
         );

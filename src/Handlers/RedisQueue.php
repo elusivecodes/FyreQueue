@@ -82,11 +82,19 @@ class RedisQueue extends Queue
      */
     public function pop(string $queue): Message|null
     {
-        $item = $this->connection->lpop($queue);
+        $item = $this->connection->lPop($queue);
 
-        return $item ?
-            unserialize($item) :
-            null;
+        if (!$item) {
+            return null;
+        }
+
+        $message = unserialize($item);
+
+        if ($message->isUnique()) {
+            $this->connection->hDel($queue.'.unique', $message->getHash());
+        }
+
+        return $message;
     }
 
     /**
@@ -97,7 +105,20 @@ class RedisQueue extends Queue
      */
     public function push(string $queue, Message $message): static
     {
-        $this->connection->rpush($queue, serialize($message));
+        if ($message->isUnique()) {
+            $uniqueKey = $queue.'.unique';
+            $messageHash = $message->getHash();
+
+            if ($this->connection->hExists($uniqueKey, $messageHash)) {
+                return $this;
+            }
+        }
+
+        $this->connection->rPush($queue, serialize($message));
+
+        if ($message->isUnique()) {
+            $this->connection->hSet($uniqueKey, $messageHash);
+        }
 
         return $this;
     }
