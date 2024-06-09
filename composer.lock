@@ -4,8 +4,176 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "72b636e0d0e28a582efdc1d987ef17b2",
-    "packages": [],
+    "content-hash": "779074d07b4859f467e6c7892dddb597",
+    "packages": [
+        {
+            "name": "fyre/command",
+            "version": "v4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elusivecodes/FyreCommand.git",
+                "reference": "315163bf75dbb514bbfa6a31f7051dd1fbdd0789"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elusivecodes/FyreCommand/zipball/315163bf75dbb514bbfa6a31f7051dd1fbdd0789",
+                "reference": "315163bf75dbb514bbfa6a31f7051dd1fbdd0789",
+                "shasum": ""
+            },
+            "require": {
+                "fyre/console": "^3.0",
+                "fyre/loader": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fyre\\Command\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "elusivecodes",
+                    "email": "elusivecodes@gmail.com"
+                }
+            ],
+            "description": "A command library.",
+            "support": {
+                "issues": "https://github.com/elusivecodes/FyreCommand/issues",
+                "source": "https://github.com/elusivecodes/FyreCommand/tree/v4.0"
+            },
+            "time": "2024-06-08T14:23:31+00:00"
+        },
+        {
+            "name": "fyre/console",
+            "version": "v3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elusivecodes/FyreConsole.git",
+                "reference": "27cd24dc8d7a2a5886c8ec221b6bfcab693cf7a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elusivecodes/FyreConsole/zipball/27cd24dc8d7a2a5886c8ec221b6bfcab693cf7a2",
+                "reference": "27cd24dc8d7a2a5886c8ec221b6bfcab693cf7a2",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fyre\\Console\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "elusivecodes",
+                    "email": "elusivecodes@gmail.com"
+                }
+            ],
+            "description": "A CLI library.",
+            "support": {
+                "issues": "https://github.com/elusivecodes/FyreConsole/issues",
+                "source": "https://github.com/elusivecodes/FyreConsole/tree/v3.0"
+            },
+            "time": "2024-06-08T08:19:54+00:00"
+        },
+        {
+            "name": "fyre/loader",
+            "version": "v2.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elusivecodes/FyreLoader.git",
+                "reference": "84718a5b282caf48576dea2dbc7b151f3a5223c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elusivecodes/FyreLoader/zipball/84718a5b282caf48576dea2dbc7b151f3a5223c8",
+                "reference": "84718a5b282caf48576dea2dbc7b151f3a5223c8",
+                "shasum": ""
+            },
+            "require": {
+                "fyre/path": "^2.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fyre\\Loader\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "elusivecodes",
+                    "email": "elusivecodes@gmail.com"
+                }
+            ],
+            "description": "An autoloader library.",
+            "support": {
+                "issues": "https://github.com/elusivecodes/FyreLoader/issues",
+                "source": "https://github.com/elusivecodes/FyreLoader/tree/v2.0.4"
+            },
+            "time": "2024-06-01T14:51:08+00:00"
+        },
+        {
+            "name": "fyre/path",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/elusivecodes/FyrePath.git",
+                "reference": "2e38191140f7c6a350cb7b03990b0c8538008a5f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/elusivecodes/FyrePath/zipball/2e38191140f7c6a350cb7b03990b0c8538008a5f",
+                "reference": "2e38191140f7c6a350cb7b03990b0c8538008a5f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^10"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Fyre\\Utility\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "elusivecodes",
+                    "email": "elusivecodes@gmail.com"
+                }
+            ],
+            "description": "A path utility library.",
+            "support": {
+                "issues": "https://github.com/elusivecodes/FyrePath/issues",
+                "source": "https://github.com/elusivecodes/FyrePath/tree/v2.0.3"
+            },
+            "time": "2024-06-01T14:32:35+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "fyre/filesystem",
@@ -49,46 +217,6 @@
                 "source": "https://github.com/elusivecodes/FyreFileSystem/tree/v2.0.3"
             },
             "time": "2024-06-01T14:41:29+00:00"
-        },
-        {
-            "name": "fyre/path",
-            "version": "v2.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/elusivecodes/FyrePath.git",
-                "reference": "2e38191140f7c6a350cb7b03990b0c8538008a5f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/elusivecodes/FyrePath/zipball/2e38191140f7c6a350cb7b03990b0c8538008a5f",
-                "reference": "2e38191140f7c6a350cb7b03990b0c8538008a5f",
-                "shasum": ""
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^10"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Fyre\\Utility\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "elusivecodes",
-                    "email": "elusivecodes@gmail.com"
-                }
-            ],
-            "description": "A path utility library.",
-            "support": {
-                "issues": "https://github.com/elusivecodes/FyrePath/issues",
-                "source": "https://github.com/elusivecodes/FyrePath/tree/v2.0.3"
-            },
-            "time": "2024-06-01T14:32:35+00:00"
         },
         {
             "name": "myclabs/deep-copy",

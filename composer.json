@@ -19,6 +19,9 @@
             "Tests\\": "tests/"
         }
     },
+    "require": {
+        "fyre/command": "^4.0"
+    },
     "require-dev": {
         "fyre/filesystem": "^2.0",
         "phpunit/phpunit": "^10"
