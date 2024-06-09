@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Command;
+namespace Fyre\Queue\Commands;
 
 use Fyre\Command\Command;
 use Fyre\Console\Console;
