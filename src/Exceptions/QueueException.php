@@ -10,7 +10,6 @@ use RuntimeException;
  */
 class QueueException extends RuntimeException
 {
-
     public static function forAuthFailed(): static
     {
         return new static('Queue handler authentication failed');
@@ -55,5 +54,4 @@ class QueueException extends RuntimeException
     {
         return new static('Queue handler invalid listener: '.$listener);
     }
-
 }

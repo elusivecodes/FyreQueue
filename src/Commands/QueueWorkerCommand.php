@@ -15,15 +15,15 @@ use function pcntl_fork;
  */
 class QueueWorkerCommand extends Command
 {
-
     protected string|null $alias = 'queue:worker';
-
-    protected string|null $name = 'Queue Worker';
 
     protected string $description = 'This command will start a new queue worker.';
 
+    protected string|null $name = 'Queue Worker';
+
     /**
      * Run the command.
+     *
      * @param array $arguments The command arguments.
      * @return int|null The exit code.
      */
@@ -37,7 +37,7 @@ class QueueWorkerCommand extends Command
 
         if ($pid) {
             Console::write('Worker started on PID: '.$pid, [
-                'color' => Console::CYAN
+                'color' => Console::CYAN,
             ]);
         } else {
             $worker = new Worker($arguments);
@@ -46,5 +46,4 @@ class QueueWorkerCommand extends Command
 
         return static::CODE_SUCCESS;
     }
-
 }

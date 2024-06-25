@@ -13,14 +13,94 @@ use Tests\Mock\MockJob;
 
 final class WorkerTest extends TestCase
 {
-
     public function testWorkerJob(): void
     {
         QueueManager::push(MockJob::class, ['test' => 1]);
 
         $worker = new Worker([
             'maxJobs' => 1,
-            'maxRuntime' => 5
+            'maxRuntime' => 5,
+        ]);
+
+        $worker->run();
+
+        $this->assertSame(
+            '{"test":1}'."\r\n",
+            (new File('tmp/job'))->contents()
+        );
+    }
+
+    public function testWorkerJobWithDelay(): void
+    {
+        QueueManager::push(MockJob::class, ['test' => 1], [
+            'delay' => 10,
+        ]);
+
+        $worker = new Worker([
+            'maxJobs' => 1,
+            'maxRuntime' => 5,
+        ]);
+
+        $worker->run();
+
+        $this->assertFalse(
+            (new File('tmp/job'))->exists()
+        );
+
+        sleep(5);
+
+        $worker = new Worker([
+            'maxJobs' => 1,
+            'maxRuntime' => 5,
+        ]);
+
+        $worker->run();
+
+        $this->assertSame(
+            '{"test":1}'."\r\n",
+            (new File('tmp/job'))->contents()
+        );
+    }
+
+    public function testWorkerJobWithExpires(): void
+    {
+        QueueManager::push(MockJob::class, ['test' => 1], [
+            'expires' => -1,
+        ]);
+
+        $worker = new Worker([
+            'maxJobs' => 1,
+            'maxRuntime' => 5,
+        ]);
+
+        $worker->run();
+
+        $this->assertFalse(
+            (new File('tmp/job'))->exists()
+        );
+    }
+
+    public function testWorkerJobWithQueue(): void
+    {
+        QueueManager::push(MockJob::class, ['test' => 1], [
+            'queue' => 'test',
+        ]);
+
+        $worker = new Worker([
+            'maxJobs' => 1,
+            'maxRuntime' => 5,
+        ]);
+
+        $worker->run();
+
+        $this->assertFalse(
+            (new File('tmp/job'))->exists()
+        );
+
+        $worker = new Worker([
+            'queue' => 'test',
+            'maxJobs' => 1,
+            'maxRuntime' => 5,
         ]);
 
         $worker->run();
@@ -38,7 +118,7 @@ final class WorkerTest extends TestCase
 
         $worker = new Worker([
             'maxJobs' => 2,
-            'maxRuntime' => 5
+            'maxRuntime' => 5,
         ]);
 
         $worker->run();
@@ -50,92 +130,11 @@ final class WorkerTest extends TestCase
         );
     }
 
-    public function testWorkerJobWithDelay(): void
-    {
-        QueueManager::push(MockJob::class, ['test' => 1], [
-            'delay' => 10
-        ]);
-
-        $worker = new Worker([
-            'maxJobs' => 1,
-            'maxRuntime' => 5
-        ]);
-
-        $worker->run();
-
-        $this->assertFalse(
-            (new File('tmp/job'))->exists()
-        );
-
-        sleep(5);
-
-        $worker = new Worker([
-            'maxJobs' => 1,
-            'maxRuntime' => 5
-        ]);
-
-        $worker->run();
-
-        $this->assertSame(
-            '{"test":1}'."\r\n",
-            (new File('tmp/job'))->contents()
-        );
-    }
-
-    public function testWorkerJobWithExpires(): void
-    {
-        QueueManager::push(MockJob::class, ['test' => 1], [
-            'expires' => -1
-        ]);
-
-        $worker = new Worker([
-            'maxJobs' => 1,
-            'maxRuntime' => 5
-        ]);
-
-        $worker->run();
-
-        $this->assertFalse(
-            (new File('tmp/job'))->exists()
-        );
-    }
-
-    public function testWorkerJobWithQueue(): void
-    {
-        QueueManager::push(MockJob::class, ['test' => 1], [
-            'queue' => 'test'
-        ]);
-
-        $worker = new Worker([
-            'maxJobs' => 1,
-            'maxRuntime' => 5
-        ]);
-
-        $worker->run();
-
-        $this->assertFalse(
-            (new File('tmp/job'))->exists()
-        );
-
-        $worker = new Worker([
-            'queue' => 'test',
-            'maxJobs' => 1,
-            'maxRuntime' => 5
-        ]);
-
-        $worker->run();
-
-        $this->assertSame(
-            '{"test":1}'."\r\n",
-            (new File('tmp/job'))->contents()
-        );
-    }
-
     protected function setUp(): void
     {
         QueueManager::clear();
         QueueManager::setConfig('default', [
-            'className' => RedisQueue::class
+            'className' => RedisQueue::class,
         ]);
 
         QueueManager::use()->clear('default');
@@ -149,5 +148,4 @@ final class WorkerTest extends TestCase
             $folder->delete();
         }
     }
-
 }

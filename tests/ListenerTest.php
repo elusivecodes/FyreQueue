@@ -18,114 +18,15 @@ use function unserialize;
 
 final class ListenerTest extends TestCase
 {
-
-    public function testListenerSuccess(): void
-    {
-        QueueManager::push(MockJob::class, ['test' => 1]);
-
-        $worker = new Worker([
-            'maxJobs' => 1,
-            'maxRuntime' => 5
-        ]);
-
-        $worker->run();
-
-        $data = (new File('tmp/start'))->contents();
-        $message = unserialize($data);
-
-        $this->assertInstanceOf(
-            Message::class,
-            $message
-        );
-
-        $this->assertSame(
-            [
-                'className' => MockJob::class,
-                'method' => 'run',
-                'arguments' => [
-                    'test' => 1
-                ],
-                'config' => 'default',
-                'queue' => 'default',
-                'after' => null,
-                'before' => null,
-                'unique' => false
-            ],
-            $message->getConfig()
-        );
-
-        $data = (new File('tmp/success'))->contents();
-        $message = unserialize($data);
-
-        $this->assertInstanceOf(
-            Message::class,
-            $message
-        );
-
-        $this->assertSame(
-            [
-                'className' => MockJob::class,
-                'method' => 'run',
-                'arguments' => [
-                    'test' => 1
-                ],
-                'config' => 'default',
-                'queue' => 'default',
-                'after' => null,
-                'before' => null,
-                'unique' => false
-            ],
-            $message->getConfig()
-        );
-    }
-
-    public function testListenerFailure(): void
-    {
-        QueueManager::push(MockJob::class, ['test' => 1], [
-            'method' => 'fail'
-        ]);
-
-        $worker = new Worker([
-            'maxJobs' => 1,
-            'maxRuntime' => 5
-        ]);
-
-        $worker->run();
-
-        $data = (new File('tmp/failure'))->contents();
-        $message = unserialize($data);
-
-        $this->assertInstanceOf(
-            Message::class,
-            $message
-        );
-
-        $this->assertSame(
-            [
-                'className' => MockJob::class,
-                'method' => 'fail',
-                'arguments' => [
-                    'test' => 1
-                ],
-                'config' => 'default',
-                'queue' => 'default',
-                'after' => null,
-                'before' => null,
-                'unique' => false
-            ],
-            $message->getConfig()
-        );
-    }
-
     public function testListenerException(): void
     {
         QueueManager::push(MockJob::class, ['test' => 1], [
-            'method' => 'error'
+            'method' => 'error',
         ]);
 
         $worker = new Worker([
             'maxJobs' => 1,
-            'maxRuntime' => 5
+            'maxRuntime' => 5,
         ]);
 
         $worker->run();
@@ -145,13 +46,13 @@ final class ListenerTest extends TestCase
                 'className' => MockJob::class,
                 'method' => 'error',
                 'arguments' => [
-                    'test' => 1
+                    'test' => 1,
                 ],
                 'config' => 'default',
                 'queue' => 'default',
                 'after' => null,
                 'before' => null,
-                'unique' => false
+                'unique' => false,
             ],
             $message->getConfig()
         );
@@ -162,13 +63,51 @@ final class ListenerTest extends TestCase
         );
     }
 
+    public function testListenerFailure(): void
+    {
+        QueueManager::push(MockJob::class, ['test' => 1], [
+            'method' => 'fail',
+        ]);
+
+        $worker = new Worker([
+            'maxJobs' => 1,
+            'maxRuntime' => 5,
+        ]);
+
+        $worker->run();
+
+        $data = (new File('tmp/failure'))->contents();
+        $message = unserialize($data);
+
+        $this->assertInstanceOf(
+            Message::class,
+            $message
+        );
+
+        $this->assertSame(
+            [
+                'className' => MockJob::class,
+                'method' => 'fail',
+                'arguments' => [
+                    'test' => 1,
+                ],
+                'config' => 'default',
+                'queue' => 'default',
+                'after' => null,
+                'before' => null,
+                'unique' => false,
+            ],
+            $message->getConfig()
+        );
+    }
+
     public function testListenerInvalid(): void
     {
         QueueManager::push('Invalid', ['test' => 1]);
 
         $worker = new Worker([
             'maxJobs' => 1,
-            'maxRuntime' => 5
+            'maxRuntime' => 5,
         ]);
 
         $worker->run();
@@ -186,13 +125,73 @@ final class ListenerTest extends TestCase
                 'className' => 'Invalid',
                 'method' => 'run',
                 'arguments' => [
-                    'test' => 1
+                    'test' => 1,
                 ],
                 'config' => 'default',
                 'queue' => 'default',
                 'after' => null,
                 'before' => null,
-                'unique' => false
+                'unique' => false,
+            ],
+            $message->getConfig()
+        );
+    }
+
+    public function testListenerSuccess(): void
+    {
+        QueueManager::push(MockJob::class, ['test' => 1]);
+
+        $worker = new Worker([
+            'maxJobs' => 1,
+            'maxRuntime' => 5,
+        ]);
+
+        $worker->run();
+
+        $data = (new File('tmp/start'))->contents();
+        $message = unserialize($data);
+
+        $this->assertInstanceOf(
+            Message::class,
+            $message
+        );
+
+        $this->assertSame(
+            [
+                'className' => MockJob::class,
+                'method' => 'run',
+                'arguments' => [
+                    'test' => 1,
+                ],
+                'config' => 'default',
+                'queue' => 'default',
+                'after' => null,
+                'before' => null,
+                'unique' => false,
+            ],
+            $message->getConfig()
+        );
+
+        $data = (new File('tmp/success'))->contents();
+        $message = unserialize($data);
+
+        $this->assertInstanceOf(
+            Message::class,
+            $message
+        );
+
+        $this->assertSame(
+            [
+                'className' => MockJob::class,
+                'method' => 'run',
+                'arguments' => [
+                    'test' => 1,
+                ],
+                'config' => 'default',
+                'queue' => 'default',
+                'after' => null,
+                'before' => null,
+                'unique' => false,
             ],
             $message->getConfig()
         );
@@ -203,7 +202,7 @@ final class ListenerTest extends TestCase
         QueueManager::clear();
         QueueManager::setConfig('default', [
             'className' => RedisQueue::class,
-            'listener' => MockListener::class
+            'listener' => MockListener::class,
         ]);
 
         QueueManager::use()->clear('default');
@@ -217,5 +216,4 @@ final class ListenerTest extends TestCase
             $folder->delete();
         }
     }
-
 }

@@ -15,7 +15,6 @@ use function is_array;
  */
 abstract class QueueManager
 {
-
     public const DEFAULT = 'default';
 
     protected static array $config = [];
@@ -33,8 +32,8 @@ abstract class QueueManager
 
     /**
      * Get the handler config.
+     *
      * @param string|null $key The config key.
-     * @return array|null
      */
     public static function getConfig(string|null $key = null): array|null
     {
@@ -47,6 +46,7 @@ abstract class QueueManager
 
     /**
      * Get the key for a queue instance.
+     *
      * @param Queue $queue The queue.
      * @return string|null The queue key.
      */
@@ -57,6 +57,7 @@ abstract class QueueManager
 
     /**
      * Determine if a config exists.
+     *
      * @param string $key The config key.
      * @return bool TRUE if the config exists, otherwise FALSE.
      */
@@ -67,6 +68,7 @@ abstract class QueueManager
 
     /**
      * Determine if a handler is loaded.
+     *
      * @param string $key The config key.
      * @return bool TRUE if the handler is loaded, otherwise FALSE.
      */
@@ -77,8 +79,10 @@ abstract class QueueManager
 
     /**
      * Load a handler.
+     *
      * @param array $options Options for the handler.
      * @return Queue The handler.
+     *
      * @throws QueueException if the handler is not valid.
      */
     public static function load(array $options = []): Queue
@@ -96,6 +100,7 @@ abstract class QueueManager
 
     /**
      * Push a job to the queue.
+     *
      * @param string $className The job class.
      * @param array $arguments The job arguments.
      * @param array $options The job options.
@@ -113,14 +118,16 @@ abstract class QueueManager
 
     /**
      * Set handler config.
+     *
      * @param string|array $key The config key.
      * @param array|null $options The config options.
+     *
      * @throws QueueException if the config is not valid.
      */
-    public static function setConfig(string|array $key, array|null $options = null): void
+    public static function setConfig(array|string $key, array|null $options = null): void
     {
         if (is_array($key)) {
-            foreach ($key AS $k => $value) {
+            foreach ($key as $k => $value) {
                 static::setConfig($k, $value);
             }
 
@@ -140,6 +147,7 @@ abstract class QueueManager
 
     /**
      * Unload a handler.
+     *
      * @param string $key The config key.
      * @return bool TRUE if the handler was removed, otherwise FALSE.
      */
@@ -157,6 +165,7 @@ abstract class QueueManager
 
     /**
      * Load a shared handler instance.
+     *
      * @param string $key The config key.
      * @return Queue The handler.
      */
@@ -164,5 +173,4 @@ abstract class QueueManager
     {
         return static::$instances[$key] ??= static::load(static::$config[$key] ?? []);
     }
-
 }

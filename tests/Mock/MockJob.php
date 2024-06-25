@@ -9,12 +9,9 @@ use function json_encode;
 
 class MockJob
 {
-
-    public static function run(array $arguments = []): void
+    public static function error(): void
     {
-        (new File('tmp/job', true))
-            ->open('a')
-            ->write(json_encode($arguments)."\r\n");
+        throw new RuntimeException();
     }
 
     public static function fail(): false
@@ -22,9 +19,10 @@ class MockJob
         return false;
     }
 
-    public static function error(): void
+    public static function run(array $arguments = []): void
     {
-        throw new RuntimeException;
+        (new File('tmp/job', true))
+            ->open('a')
+            ->write(json_encode($arguments)."\r\n");
     }
-
 }

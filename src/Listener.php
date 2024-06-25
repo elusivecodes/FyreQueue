@@ -10,51 +10,39 @@ use Throwable;
  */
 class Listener
 {
-
     /**
      * Handle a Message exception.
+     *
      * @param Message $message The Message.
      * @param Throwable $error The Exception.
      */
-    public function exception(Message $message, Throwable $error): void
-    {
-        
-    }
+    public function exception(Message $message, Throwable $error): void {}
 
     /**
      * Handle a failed Message.
+     *
      * @param Message $message The Message.
      */
-    public function failure(Message $message): void
-    {
-
-    }
+    public function failure(Message $message): void {}
 
     /**
      * Handle an invalid Message.
+     *
      * @param Message $message The Message.
      */
-    public function invalid(Message $message): void
-    {
-
-    }
+    public function invalid(Message $message): void {}
 
     /**
      * Handle a start Message.
+     *
      * @param Message $message The Message.
      */
-    public function start(Message $message): void
-    {
-
-    }
+    public function start(Message $message): void {}
 
     /**
      * Handle a success Message.
+     *
      * @param Message $message The Message.
      */
-    public function success(Message $message): void
-    {
-
-    }
-
+    public function success(Message $message): void {}
 }

@@ -10,17 +10,16 @@ use PHPUnit\Framework\TestCase;
 
 final class QueueManagerTest extends TestCase
 {
-
     public function testGetConfig(): void
     {
         $this->assertSame(
             [
                 'default' => [
-                    'className' => RedisQueue::class
+                    'className' => RedisQueue::class,
                 ],
                 'other' => [
-                    'className' => RedisQueue::class
-                ]
+                    'className' => RedisQueue::class,
+                ],
             ],
             QueueManager::getConfig()
         );
@@ -30,7 +29,7 @@ final class QueueManagerTest extends TestCase
     {
         $this->assertSame(
             [
-                'className' => RedisQueue::class
+                'className' => RedisQueue::class,
             ],
             QueueManager::getConfig('default')
         );
@@ -49,7 +48,7 @@ final class QueueManagerTest extends TestCase
     public function testGetKeyInvalid(): void
     {
         $handler = QueueManager::load([
-            'className' => RedisQueue::class
+            'className' => RedisQueue::class,
         ]);
 
         $this->assertSame(
@@ -61,18 +60,9 @@ final class QueueManagerTest extends TestCase
     public function testIsLoaded(): void
     {
         QueueManager::use();
-        
+
         $this->assertTrue(
             QueueManager::isLoaded()
-        );
-    }
-
-    public function testIsLoadedKey(): void
-    {
-        QueueManager::use('other');
-        
-        $this->assertTrue(
-            QueueManager::isLoaded('other')
         );
     }
 
@@ -83,12 +73,21 @@ final class QueueManagerTest extends TestCase
         );
     }
 
+    public function testIsLoadedKey(): void
+    {
+        QueueManager::use('other');
+
+        $this->assertTrue(
+            QueueManager::isLoaded('other')
+        );
+    }
+
     public function testLoad(): void
     {
         $this->assertInstanceOf(
             RedisQueue::class,
             QueueManager::load([
-                'className' => RedisQueue::class
+                'className' => RedisQueue::class,
             ])
         );
     }
@@ -98,7 +97,7 @@ final class QueueManagerTest extends TestCase
         $this->expectException(QueueException::class);
 
         QueueManager::load([
-            'className' => 'Invalid'
+            'className' => 'Invalid',
         ]);
     }
 
@@ -106,13 +105,13 @@ final class QueueManagerTest extends TestCase
     {
         QueueManager::setConfig([
             'test' => [
-                'className' => RedisQueue::class
-            ]
+                'className' => RedisQueue::class,
+            ],
         ]);
 
         $this->assertSame(
             [
-                'className' => RedisQueue::class
+                'className' => RedisQueue::class,
             ],
             QueueManager::getConfig('test')
         );
@@ -123,7 +122,7 @@ final class QueueManagerTest extends TestCase
         $this->expectException(QueueException::class);
 
         QueueManager::setConfig('default', [
-            'className' => RedisQueue::class
+            'className' => RedisQueue::class,
         ]);
     }
 
@@ -143,6 +142,13 @@ final class QueueManagerTest extends TestCase
         );
     }
 
+    public function testUnloadInvalid(): void
+    {
+        $this->assertFalse(
+            QueueManager::unload('test')
+        );
+    }
+
     public function testUnloadKey(): void
     {
         QueueManager::use('other');
@@ -156,13 +162,6 @@ final class QueueManagerTest extends TestCase
         );
         $this->assertFalse(
             QueueManager::hasConfig('other')
-        );
-    }
-
-    public function testUnloadInvalid(): void
-    {
-        $this->assertFalse(
-            QueueManager::unload('test')
         );
     }
 
@@ -185,12 +184,11 @@ final class QueueManagerTest extends TestCase
 
         QueueManager::setConfig([
             'default' => [
-                'className' => RedisQueue::class
+                'className' => RedisQueue::class,
             ],
             'other' => [
-                'className' => RedisQueue::class
-            ]
+                'className' => RedisQueue::class,
+            ],
         ]);
     }
-
 }

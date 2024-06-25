@@ -11,14 +11,13 @@ use function serialize;
 
 class MockListener extends Listener
 {
-
     public function exception(Message $message, Throwable $exception): void
     {
         (new File('tmp/exception', true))
             ->open('a')
             ->write(serialize([
                 'message' => $message,
-                'exception' => $exception
+                'exception' => $exception,
             ]));
     }
 
@@ -49,5 +48,4 @@ class MockListener extends Listener
             ->open('a')
             ->write(serialize($message));
     }
-
 }

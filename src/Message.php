@@ -18,7 +18,6 @@ use function time;
  */
 class Message
 {
-
     protected static array $defaults = [
         'className' => null,
         'method' => 'run',
@@ -29,13 +28,14 @@ class Message
         'delay' => 0,
         'after' => null,
         'before' => null,
-        'unique' => false
+        'unique' => false,
     ];
 
     protected array $config;
 
     /**
      * New Message constructor.
+     *
      * @param array $options The message options.
      */
     public function __construct(array $options = [])
@@ -56,6 +56,7 @@ class Message
 
     /**
      * Get the message arguments.
+     *
      * @return array The message arguments.
      */
     public function getArguments(): array
@@ -65,6 +66,7 @@ class Message
 
     /**
      * Get the message callback.
+     *
      * @return Closure The message callback.
      */
     public function getCallback(): Closure
@@ -74,6 +76,7 @@ class Message
 
     /**
      * Get the message config.
+     *
      * @return array The message config.
      */
     public function getConfig(): array
@@ -83,6 +86,7 @@ class Message
 
     /**
      * Get the message hash.
+     *
      * @return string The message hash.
      */
     public function getHash(): string
@@ -94,7 +98,7 @@ class Message
         $hashInput = implode([
             $this->config['className'],
             $this->config['method'],
-            json_encode($arguments)
+            json_encode($arguments),
         ]);
 
         return md5($hashInput);
@@ -102,6 +106,7 @@ class Message
 
     /**
      * Determine if the message has expired.
+     *
      * @return bool TRUE if the message has expired, otherwise FALSE.
      */
     public function isExpired(): bool
@@ -115,6 +120,7 @@ class Message
 
     /**
      * Determine if the message is ready.
+     *
      * @return bool TRUE if the message is ready, otherwise FALSE.
      */
     public function isReady(): bool
@@ -128,6 +134,7 @@ class Message
 
     /**
      * Determine if the message is unique.
+     *
      * @return bool TRUE if the message is unique, otherwise FALSE.
      */
     public function isUnique(): bool
@@ -137,11 +144,11 @@ class Message
 
     /**
      * Determine if the message is valid.
+     *
      * @return bool TRUE if the message is valid, otherwise FALSE.
      */
     public function isValid(): bool
     {
         return class_exists($this->config['className']) && method_exists($this->config['className'], $this->config['method']);
     }
-
 }

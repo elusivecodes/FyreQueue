@@ -14,18 +14,19 @@ use function is_a;
  */
 abstract class Queue
 {
-
     protected static array $defaults = [
-        'listener' => Listener::class
+        'listener' => Listener::class,
     ];
-
-    protected Listener $listener;
 
     protected array $config;
 
+    protected Listener $listener;
+
     /**
      * New Queue constructor.
+     *
      * @param array $options The queue options.
+     *
      * @throws QueueException if the listener is not valid.
      */
     public function __construct(array $options = [])
@@ -39,6 +40,7 @@ abstract class Queue
 
     /**
      * Clear all items from the queue.
+     *
      * @param string $queue The queue name.
      * @param bool TRUE if the queue was cleared, otherwise FALSE.
      */
@@ -46,15 +48,17 @@ abstract class Queue
 
     /**
      * Get the queue Listener.
+     *
      * @return Listener The Listener.
      */
     public function getListener(): Listener
     {
-        return $this->listener ??= new $this->config['listener'];
+        return $this->listener ??= new $this->config['listener']();
     }
 
     /**
      * Pop the last message off the queue.
+     *
      * @param string $queue The queue name.
      * @return Message|null The last message.
      */
@@ -62,10 +66,10 @@ abstract class Queue
 
     /**
      * Push a message onto the queue.
+     *
      * @param string $queue The queue name.
      * @param Message $message The Message.
      * @return Queue The Queue.
      */
     abstract public function push(string $queue, Message $message): static;
-
 }

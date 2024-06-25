@@ -17,20 +17,21 @@ use function unserialize;
  */
 class RedisQueue extends Queue
 {
-
-    protected static array $defaults = [ 
+    protected static array $defaults = [
         'host' => '127.0.0.1',
         'password' => null,
         'port' => 6379,
         'database' => null,
-        'timeout' => 0
+        'timeout' => 0,
     ];
 
     protected Redis $connection;
 
     /**
      * New Queue constructor.
+     *
      * @param array $options The queue options.
+     *
      * @throws QueueException if the connection is not valid.
      */
     public function __construct(array $options)
@@ -39,7 +40,7 @@ class RedisQueue extends Queue
 
         try {
             $this->connection = new Redis();
-    
+
             if (!$this->connection->connect($this->config['host'], (int) $this->config['port'], $this->config['timeout'])) {
                 throw QueueException::forConnectionFailed();
             }
@@ -67,6 +68,7 @@ class RedisQueue extends Queue
 
     /**
      * Clear all items from the queue.
+     *
      * @param string $queue The queue name.
      * @param bool TRUE if the queue was cleared, otherwise FALSE.
      */
@@ -77,6 +79,7 @@ class RedisQueue extends Queue
 
     /**
      * Pop the last message off the queue.
+     *
      * @param string $queue The queue name.
      * @return Message|null The last message.
      */
@@ -99,6 +102,7 @@ class RedisQueue extends Queue
 
     /**
      * Push a message onto the queue.
+     *
      * @param string $queue The queue name.
      * @param Message $message The Message.
      * @return Queue The Queue.
@@ -122,5 +126,4 @@ class RedisQueue extends Queue
 
         return $this;
     }
-
 }
