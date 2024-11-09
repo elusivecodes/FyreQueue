@@ -3,57 +3,79 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
+use Fyre\Container\Container;
 use Fyre\Queue\Exceptions\QueueException;
 
+use function array_map;
 use function array_replace;
-use function class_exists;
-use function is_a;
+use function is_string;
 
 /**
  * Queue
  */
 abstract class Queue
 {
+    public const DEFAULT = 'default';
+
     protected static array $defaults = [
-        'listener' => Listener::class,
+        'listeners' => [],
     ];
 
     protected array $config;
 
-    protected Listener $listener;
+    protected Container $container;
+
+    protected array $listeners;
 
     /**
      * New Queue constructor.
      *
+     * @param Container $container The Container;
      * @param array $options The queue options.
      *
      * @throws QueueException if the listener is not valid.
      */
-    public function __construct(array $options = [])
+    public function __construct(Container $container, array $options = [])
     {
+        $this->container = $container;
         $this->config = array_replace(self::$defaults, static::$defaults, $options);
-
-        if (!class_exists($this->config['listener']) || !is_a($this->config['listener'], Listener::class, true)) {
-            throw QueueException::forInvalidListener($this->config['listener']);
-        }
     }
 
     /**
      * Clear all items from the queue.
      *
      * @param string $queue The queue name.
-     * @param bool TRUE if the queue was cleared, otherwise FALSE.
      */
-    abstract public function clear(string $queue): bool;
+    abstract public function clear(string $queue = self::DEFAULT): void;
 
     /**
-     * Get the queue Listener.
+     * Mark a job as completed.
      *
-     * @return Listener The Listener.
+     * @param Message $message The Message.
      */
-    public function getListener(): Listener
+    abstract public function complete(Message $message): void;
+
+    /**
+     * Mark a job as failed.
+     *
+     * @param Message $message The Message.
+     * @return bool TRUE if the Message was retried, otherwise FALSE.
+     */
+    abstract public function fail(Message $message): bool;
+
+    /**
+     * Get the queue Listenesr.
+     *
+     * @return array The Listeners.
+     */
+    public function getListeners(): array
     {
-        return $this->listener ??= new $this->config['listener']();
+        return $this->listeners ??= array_map(
+            fn(object|string $listener): object => is_string($listener) ?
+                $this->container->use($listener) :
+                $listener,
+            $this->config['listeners']
+        );
     }
 
     /**
@@ -62,14 +84,35 @@ abstract class Queue
      * @param string $queue The queue name.
      * @return Message|null The last message.
      */
-    abstract public function pop(string $queue): Message|null;
+    abstract public function pop(string $queue = self::DEFAULT): Message|null;
 
     /**
-     * Push a message onto the queue.
+     * Push a job onto the queue.
+     *
+     * @param Message $message The Message.
+     * @return bool TRUE if the Message was added to the queue, otherwise FALSE.
+     */
+    abstract public function push(Message $message): bool;
+
+    /**
+     * Get all the active queues.
+     *
+     * @return array The active queues.
+     */
+    abstract public function queues(): array;
+
+    /**
+     * Reset the queue statistics.
      *
      * @param string $queue The queue name.
-     * @param Message $message The Message.
-     * @return Queue The Queue.
      */
-    abstract public function push(string $queue, Message $message): static;
+    abstract public function reset(string $queue = self::DEFAULT): void;
+
+    /**
+     * Get the statistics for a queue
+     *
+     * @param string $queue The queue name.
+     * @return array The queue statistics.
+     */
+    abstract public function stats(string $queue = self::DEFAULT): array;
 }

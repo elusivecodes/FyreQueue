@@ -5,24 +5,22 @@ namespace Tests\Mock;
 use Fyre\FileSystem\File;
 use RuntimeException;
 
-use function json_encode;
-
 class MockJob
 {
-    public static function error(): void
+    public function error(): void
     {
         throw new RuntimeException();
     }
 
-    public static function fail(): false
+    public function fail(): false
     {
         return false;
     }
 
-    public static function run(array $arguments = []): void
+    public function run(int $test): void
     {
         (new File('tmp/job', true))
             ->open('a')
-            ->write(json_encode($arguments)."\r\n");
+            ->write((string) $test);
     }
 }

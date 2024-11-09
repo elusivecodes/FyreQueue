@@ -3,16 +3,19 @@
 namespace Tests\Mock;
 
 use Fyre\FileSystem\File;
-use Fyre\Queue\Listener;
 use Fyre\Queue\Message;
 use Throwable;
 
 use function serialize;
 
-class MockListener extends Listener
+class MockListener
 {
-    public function exception(Message $message, Throwable $exception): void
+    public function exception(Message $message, Throwable $exception, bool $retried): void
     {
+        if ($retried) {
+            return;
+        }
+
         (new File('tmp/exception', true))
             ->open('a')
             ->write(serialize([
@@ -21,8 +24,12 @@ class MockListener extends Listener
             ]));
     }
 
-    public function failure(Message $message): void
+    public function failure(Message $message, bool $retried): void
     {
+        if ($retried) {
+            return;
+        }
+
         (new File('tmp/failure', true))
             ->open('a')
             ->write(serialize($message));

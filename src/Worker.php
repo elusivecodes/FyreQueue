@@ -3,11 +3,19 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
+use Fyre\Container\Container;
 use Throwable;
 
 use function array_replace;
+use function method_exists;
+use function pcntl_async_signals;
+use function pcntl_signal;
 use function time;
 use function usleep;
+
+use const SIG_DFL;
+use const SIGQUIT;
+use const SIGTERM;
 
 /**
  * Worker
@@ -15,33 +23,41 @@ use function usleep;
 class Worker
 {
     protected static array $defaults = [
-        'config' => 'default',
-        'queue' => 'default',
+        'config' => QueueManager::DEFAULT,
+        'queue' => Queue::DEFAULT,
         'maxJobs' => 0,
         'maxRuntime' => 0,
+        'rest' => 10000,
+        'sleep' => 1000000,
     ];
 
     protected array $config;
 
+    protected Container $container;
+
     protected int $jobCount = 0;
 
-    protected Listener $listener;
+    protected array $listeners;
 
     protected Queue $queue;
 
-    protected int $start;
+    protected int|null $start = null;
 
     /**
      * New Worker constructor.
      *
+     * @param Container $container The Container.
+     * @param QueueManager $queueManager The QueueManager.
      * @param array $options The worker options.
      */
-    public function __construct(array $options = [])
+    public function __construct(Container $container, QueueManager $queueManager, array $options = [])
     {
+        $this->container = $container;
+
         $this->config = array_replace(self::$defaults, static::$defaults, $options);
 
-        $this->queue = QueueManager::use($this->config['config']);
-        $this->listener = $this->queue->getListener();
+        $this->queue = $queueManager->use($this->config['config']);
+        $this->listeners = $this->queue->getListeners();
     }
 
     /**
@@ -49,10 +65,24 @@ class Worker
      */
     public function run(): void
     {
+        if ($this->start !== null) {
+            return;
+        }
+
         $this->start = time();
         $this->jobCount = 0;
 
-        while (true) {
+        $running = true;
+        $stop = function() use (&$running): void {
+            $running = false;
+        };
+
+        pcntl_async_signals(true);
+
+        pcntl_signal(SIGTERM, $stop);
+        pcntl_signal(SIGQUIT, $stop);
+
+        while ($running) {
             if ($this->config['maxJobs'] && $this->jobCount >= $this->config['maxJobs']) {
                 break;
             }
@@ -65,9 +95,31 @@ class Worker
 
             if ($message) {
                 $this->process($message);
+
+                usleep($this->config['rest']);
+            } else {
+                usleep($this->config['sleep']);
+            }
+        }
+
+        pcntl_signal(SIGTERM, SIG_DFL);
+        pcntl_signal(SIGQUIT, SIG_DFL);
+    }
+
+    /**
+     * Handle an event callbacks.
+     *
+     * @param string $event The event.
+     * @param array $arguments The event arguments.
+     */
+    protected function handleEvent(string $event, array $arguments): void
+    {
+        foreach ($this->listeners as $listener) {
+            if (!method_exists($listener, $event)) {
+                continue;
             }
 
-            usleep(1000);
+            $listener->$event(...$arguments);
         }
     }
 
@@ -79,7 +131,7 @@ class Worker
     protected function process(Message $message): void
     {
         if (!$message->isValid()) {
-            $this->listener->invalid($message);
+            $this->handleEvent('invalid', [$message]);
 
             return;
         }
@@ -88,27 +140,29 @@ class Worker
             return;
         }
 
-        if (!$message->isReady()) {
-            $config = $message->getConfig();
-
-            $this->queue->push($config['queue'], $message);
-
-            return;
-        }
+        $config = $message->getConfig();
 
         try {
-            $this->listener->start($message);
+            $this->handleEvent('start', [$message]);
 
-            $callback = $message->getCallback();
-            $arguments = $message->getArguments();
+            $instance = $this->container->build($config['className']);
+            $method = $config['method'];
 
-            if ($callback($arguments) === false) {
-                $this->listener->failure($message);
+            $result = $this->container->call([$instance, $method], $config['arguments']);
+
+            if ($result === false) {
+                $retried = $this->queue->fail($message);
+
+                $this->handleEvent('failure', [$message, $retried]);
             } else {
-                $this->listener->success($message);
+                $this->queue->complete($message);
+
+                $this->handleEvent('success', [$message]);
             }
         } catch (Throwable $e) {
-            $this->listener->exception($message, $e);
+            $retried = $this->queue->fail($message);
+
+            $this->handleEvent('exception', [$message, $e, $retried]);
         }
 
         $this->jobCount++;

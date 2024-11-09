@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Fyre\Queue;
 
-use Closure;
-
 use function class_exists;
 use function implode;
 use function json_encode;
@@ -22,16 +20,20 @@ class Message
         'className' => null,
         'method' => 'run',
         'arguments' => [],
-        'config' => 'default',
-        'queue' => 'default',
-        'expires' => 0,
+        'config' => QueueManager::DEFAULT,
+        'queue' => Queue::DEFAULT,
         'delay' => 0,
+        'expires' => 0,
         'after' => null,
         'before' => null,
+        'retry' => true,
+        'maxRetries' => 5,
         'unique' => false,
     ];
 
     protected array $config;
+
+    protected int $retryAttempts = 0;
 
     /**
      * New Message constructor.
@@ -55,23 +57,13 @@ class Message
     }
 
     /**
-     * Get the message arguments.
+     * Get the timestamp when the message can be sent.
      *
-     * @return array The message arguments.
+     * @return int|null The timestamp when the message can be sent.
      */
-    public function getArguments(): array
+    public function getAfter(): int|null
     {
-        return $this->config['arguments'];
-    }
-
-    /**
-     * Get the message callback.
-     *
-     * @return Closure The message callback.
-     */
-    public function getCallback(): Closure
-    {
-        return Closure::fromCallable([$this->config['className'], $this->config['method']]);
+        return $this->config['after'];
     }
 
     /**
@@ -105,7 +97,17 @@ class Message
     }
 
     /**
-     * Determine if the message has expired.
+     * Get the message queue.
+     *
+     * @return string The message queue.
+     */
+    public function getQueue(): string
+    {
+        return $this->config['queue'];
+    }
+
+    /**
+     * Determine whether the message has expired.
      *
      * @return bool TRUE if the message has expired, otherwise FALSE.
      */
@@ -119,13 +121,13 @@ class Message
     }
 
     /**
-     * Determine if the message is ready.
+     * Determine whether the message is ready.
      *
      * @return bool TRUE if the message is ready, otherwise FALSE.
      */
     public function isReady(): bool
     {
-        if (!$this->config['after']) {
+        if ($this->config['after'] === null) {
             return true;
         }
 
@@ -133,9 +135,9 @@ class Message
     }
 
     /**
-     * Determine if the message is unique.
+     * Determine whether the message must be unique.
      *
-     * @return bool TRUE if the message is unique, otherwise FALSE.
+     * @return bool TRUE if the message must be unique, otherwise FALSE.
      */
     public function isUnique(): bool
     {
@@ -143,12 +145,26 @@ class Message
     }
 
     /**
-     * Determine if the message is valid.
+     * Determine whether the message is valid.
      *
      * @return bool TRUE if the message is valid, otherwise FALSE.
      */
     public function isValid(): bool
     {
         return class_exists($this->config['className']) && method_exists($this->config['className'], $this->config['method']);
+    }
+
+    /**
+     * Determine whether the message should be retried.
+     *
+     * @return bool TRUE if the message should be retried, otherwise FALSE.
+     */
+    public function shouldRetry(): bool
+    {
+        if (!$this->config['retry'] || $this->isExpired()) {
+            return false;
+        }
+
+        return $this->retryAttempts++ < $this->config['maxRetries'] - 1;
     }
 }

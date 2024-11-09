@@ -35,11 +35,6 @@ class QueueException extends RuntimeException
         return new static('Queue handler class not found: '.$className);
     }
 
-    public static function forInvalidConfig(string $key): static
-    {
-        return new static('Queue handler invalid config: '.$key);
-    }
-
     public static function forInvalidDatabase(string $database): static
     {
         return new static('Queue handler invalid database: '.$database);
@@ -48,10 +43,5 @@ class QueueException extends RuntimeException
     public static function forInvalidKey(string $key): static
     {
         return new static('Queue handler invalid key: '.$key);
-    }
-
-    public static function forInvalidListener(string $listener): static
-    {
-        return new static('Queue handler invalid listener: '.$listener);
     }
 }
