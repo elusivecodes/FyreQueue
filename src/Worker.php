@@ -54,7 +54,7 @@ class Worker
     {
         $this->container = $container;
 
-        $this->config = array_replace(self::$defaults, static::$defaults, $options);
+        $this->config = array_replace(static::$defaults, $options);
 
         $this->queue = $queueManager->use($this->config['config']);
         $this->listeners = $this->queue->getListeners();

@@ -279,7 +279,7 @@ The Redis queue can be loaded using custom configuration.
     - `timeout` is a number indicating the connection timeout.
 
 ```php
-$queue = $queueManager->build($options);
+$container->use(Config::class)->set('Queue.redis', $options);
 ```
 
 
