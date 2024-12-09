@@ -124,7 +124,7 @@ Push a job to a [*Queue*](#queues).
 - `$arguments` is an array containing arguments that will be passed to the job.
 - `$options` is an array containing options for the [*Message*](#messages).
     - `config` is a string representing the configuration key, and will default to `QueueManager::DEFAULT`.
-    - `queue` is a string representing the [queue](#queues) name, and will default to `Queue::DEFAULT`.
+    - `queue` is a string representing the [queue](#queues) name, and will default to `QueueManager::DEFAULT`.
     - `method` is a string representing the class method, and will default to "*run*".
     - `delay` is a number representing the number of seconds before the job should run, and will default to *0*.
     - `expires` is a number representing the number of seconds after which the job will expire, and will default to *0*.
@@ -182,7 +182,7 @@ Custom queues can be created by extending `\Fyre\Queue\Queue`, ensuring all belo
 
 Clear all items from the queue.
 
-- `$queueName` is a string representing the queue name, and will default to `Queue::DEFAULT`.
+- `$queueName` is a string representing the queue name, and will default to `QueueManager::DEFAULT`.
 
 ```php
 $queue->clear($queueName);
@@ -248,7 +248,7 @@ $queues = $queue->queues();
 
 Reset the queue statistics.
 
-- `$queueName` is a string representing the queue name, and will default to `Queue::DEFAULT`.
+- `$queueName` is a string representing the queue name, and will default to `QueueManager::DEFAULT`.
 
 ```php
 $queue->reset($queueName);
@@ -258,7 +258,7 @@ $queue->reset($queueName);
 
 Get the statistics for a queue.
 
-- `$queueName` is a string representing the queue name, and will default to `Queue::DEFAULT`.
+- `$queueName` is a string representing the queue name, and will default to `QueueManager::DEFAULT`.
 
 ```php
 $stats = $queue->stats($queueName);
@@ -295,7 +295,7 @@ use Fyre\Queue\Worker;
 - `$queueManager` is a *QueueManager*.
 - `$options` is an array containing configuration options.
     - `config` is a string representing the configuration key, and will default to `QueueManager::DEFAULT`.
-    - `queue` is a string representing the queue name, and will default to `Queue::DEFAULT`.
+    - `queue` is a string representing the queue name, and will default to `QueueManager::DEFAULT`.
     - `maxJobs` is a number representing the maximum number of jobs to execute, and will default to *0*.
     - `maxRuntime` is a number representing the maximum number of seconds the worker should run, and will default to *0*.
     - `rest` is a number representing the number of microseconds to rest after processing a job, and will default to *10000*.
@@ -388,7 +388,7 @@ use Fyre\Queue\Message;
     - `className` is a string representing the job class.
     - `arguments` is an array containing arguments that will be passed to the job.
     - `config` is a string representing the configuration key, and will default to `QueueManager::DEFAULT`.
-    - `queue` is a string representing the queue name, and will default to `Queue::DEFAULT`.
+    - `queue` is a string representing the queue name, and will default to `QueueManager::DEFAULT`.
     - `method` is a string representing the class method, and will default to "*run*".
     - `delay` is a number representing the number of seconds before the job should run, and will default to *0*.
     - `expires` is a number representing the number of seconds after which the job will expire, and will default to *0*.
@@ -480,7 +480,7 @@ $shouldretry = $message->shouldRetry();
 Display stats for the queue.
 
 - `--config` is a the configuration key, and will default to `QueueManager::DEFAULT`.
-- `--queue` is a the [queue](#queues) name, and will default to `Queue::DEFAULT`.
+- `--queue` is a the [queue](#queues) name, and will default to `QueueManager::DEFAULT`.
 
 ```php
 $commandRunner->run('queue:stats', ['--config', 'default', '--queue', 'default']);
@@ -491,7 +491,7 @@ $commandRunner->run('queue:stats', ['--config', 'default', '--queue', 'default']
 Start a background queue worker.
 
 - `--config` is a the configuration key, and will default to `QueueManager::DEFAULT`.
-- `--queue` is a the [queue](#queues) name, and will default to `Queue::DEFAULT`.
+- `--queue` is a the [queue](#queues) name, and will default to `QueueManager::DEFAULT`.
 - `--max-jobs` is the maximum number of jobs to execute, and will default to *0*.
 - `--max-runtime` is the maximum number of seconds the worker should run, and will default to *0*.
 
