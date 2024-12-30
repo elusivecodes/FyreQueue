@@ -22,7 +22,8 @@
     "require": {
         "fyre/command": "^6.0",
         "fyre/config": "^4.0",
-        "fyre/container": "^1.0"
+        "fyre/container": "^1.0",
+        "fyre/event": "^4.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.59",

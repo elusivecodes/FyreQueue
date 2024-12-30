@@ -10,7 +10,6 @@
 - [Queues](#queues)
     - [Redis](#redis)
 - [Workers](#workers)
-- [Listeners](#listeners)
 - [Messages](#messages)
 - [Commands](#commands)
     - [Stats](#stats)
@@ -208,14 +207,6 @@ Mark a job as failed.
 $queue->fail($message);
 ```
 
-**Get Listeners**
-
-Get the queue [*listeners*](#listeners).
-
-```php
-$listeners - $queue->getListeners();
-```
-
 **Pop**
 
 Pop the last item off the queue.
@@ -271,7 +262,6 @@ The Redis queue can be loaded using custom configuration.
 
 - `$options` is an array containing configuration options.
     - `className` must be set to `\Fyre\Queue\Handlers\RedisQueue`.
-    - `listeners` is an array containing [*Listener*](#listeners) class names or objects, and will default to *[]*.
     - `host` is a string representing the Redis host, and will default to "*127.0.0.1*".
     - `password` is a string representing the Redis password
     - `port` is a number indicating the Redis port, and will default to *6379*.
@@ -314,71 +304,9 @@ $worker->run();
 ```
 
 
-## Listeners
-
-You can attach listeners to a [*Queue*](#queues) by specifying a `listeners` array in the `$options` variable above.
-
-Listener dependencies will be resolved automatically from the [*Container*](https://github.com/elusivecodes/FyreContainer).
-
-Custom listener can be created and implement any of the below methods.
-
-**Exception**
-
-Handle a message exception.
-
-- `$message` is the [*Message*](#messages).
-- `$exception` is the exception.`
-- `$retried` is a boolean indicating whether the message was retried.
-
-```php
-$listener->exception($message, $exception, $retried);
-```
-
-**Failure**
-
-Handle a failed message.
-
-- `$message` is the [*Message*](#messages).
-- `$retried` is a boolean indicating whether the message was retried.
-
-```php
-$listener->failure($message, $retried);
-```
-
-**Invalid**
-
-Handle an invalid message.
-
-- `$message` is the [*Message*](#messages).
-
-```php
-$listener->invalid($message);
-```
-
-**Start**
-
-Handle a start message.
-
-- `$message` is the [*Message*](#messages).
-
-```php
-$listener->start($message);
-```
-
-**Success**
-
-Handle a success message.
-
-- `$message` is the [*Message*](#messages).
-
-```php
-$listener->success($message);
-```
-
-
 ## Messages
 
-Messages are used internally to pass data between the [*Queue*](#queues), [*Worker*](#workers) and [*Listener*](#listeners).
+Messages are used internally to pass data between the [*Queue*](#queues) and [*Worker*](#workers).
 
 ```php
 use Fyre\Queue\Message;

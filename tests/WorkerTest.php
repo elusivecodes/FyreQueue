@@ -5,6 +5,7 @@ namespace Tests;
 
 use Fyre\Config\Config;
 use Fyre\Container\Container;
+use Fyre\Event\EventManager;
 use Fyre\FileSystem\File;
 use Fyre\FileSystem\Folder;
 use Fyre\Queue\Handlers\RedisQueue;
@@ -289,6 +290,7 @@ final class WorkerTest extends TestCase
     {
         $this->container = new Container();
         $this->container->singleton(Config::class);
+        $this->container->singleton(EventManager::class, fn(): EventManager => new EventManager());
         $this->container->singleton(QueueManager::class);
 
         $this->container->use(Config::class)->set('Queue', [

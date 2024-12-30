@@ -4,10 +4,11 @@ declare(strict_types=1);
 namespace Fyre\Queue;
 
 use Fyre\Container\Container;
+use Fyre\Event\EventDispatcherTrait;
+use Fyre\Event\EventManager;
 use Throwable;
 
 use function array_replace;
-use function method_exists;
 use function pcntl_async_signals;
 use function pcntl_signal;
 use function time;
@@ -22,6 +23,8 @@ use const SIGTERM;
  */
 class Worker
 {
+    use EventDispatcherTrait;
+
     protected static array $defaults = [
         'config' => QueueManager::DEFAULT,
         'queue' => Queue::DEFAULT,
@@ -48,16 +51,17 @@ class Worker
      *
      * @param Container $container The Container.
      * @param QueueManager $queueManager The QueueManager.
+     * @param EventManager $eventManager The EventManager.
      * @param array $options The worker options.
      */
-    public function __construct(Container $container, QueueManager $queueManager, array $options = [])
+    public function __construct(Container $container, QueueManager $queueManager, EventManager $eventManager, array $options = [])
     {
         $this->container = $container;
+        $this->eventManager = $eventManager;
 
         $this->config = array_replace(static::$defaults, $options);
 
         $this->queue = $queueManager->use($this->config['config']);
-        $this->listeners = $this->queue->getListeners();
     }
 
     /**
@@ -107,23 +111,6 @@ class Worker
     }
 
     /**
-     * Handle an event callbacks.
-     *
-     * @param string $event The event.
-     * @param array $arguments The event arguments.
-     */
-    protected function handleEvent(string $event, array $arguments): void
-    {
-        foreach ($this->listeners as $listener) {
-            if (!method_exists($listener, $event)) {
-                continue;
-            }
-
-            $listener->$event(...$arguments);
-        }
-    }
-
-    /**
      * Process a Message.
      *
      * @param Message $message The Message.
@@ -131,7 +118,7 @@ class Worker
     protected function process(Message $message): void
     {
         if (!$message->isValid()) {
-            $this->handleEvent('invalid', [$message]);
+            $this->dispatchEvent('Queue.invalid', ['message' => $message], false);
 
             return;
         }
@@ -143,7 +130,7 @@ class Worker
         $config = $message->getConfig();
 
         try {
-            $this->handleEvent('start', [$message]);
+            $this->dispatchEvent('Queue.start', ['message' => $message], false);
 
             $instance = $this->container->build($config['className']);
             $method = $config['method'];
@@ -153,16 +140,16 @@ class Worker
             if ($result === false) {
                 $retried = $this->queue->fail($message);
 
-                $this->handleEvent('failure', [$message, $retried]);
+                $this->dispatchEvent('Queue.failure', ['message' => $message, 'shouldRetry' => $retried], false);
             } else {
                 $this->queue->complete($message);
 
-                $this->handleEvent('success', [$message]);
+                $this->dispatchEvent('Queue.success', ['message' => $message], false);
             }
         } catch (Throwable $e) {
             $retried = $this->queue->fail($message);
 
-            $this->handleEvent('exception', [$message, $e, $retried]);
+            $this->dispatchEvent('Queue.exception', ['message' => $message, 'exception' => $e, 'shouldRetry' => $retried], false);
         }
 
         $this->jobCount++;

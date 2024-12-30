@@ -4,11 +4,8 @@ declare(strict_types=1);
 namespace Fyre\Queue;
 
 use Fyre\Container\Container;
-use Fyre\Queue\Exceptions\QueueException;
 
-use function array_map;
 use function array_replace;
-use function is_string;
 
 /**
  * Queue
@@ -17,23 +14,17 @@ abstract class Queue
 {
     public const DEFAULT = 'default';
 
-    protected static array $defaults = [
-        'listeners' => [],
-    ];
+    protected static array $defaults = [];
 
     protected array $config;
 
     protected Container $container;
-
-    protected array $listeners;
 
     /**
      * New Queue constructor.
      *
      * @param Container $container The Container;
      * @param array $options The queue options.
-     *
-     * @throws QueueException if the listener is not valid.
      */
     public function __construct(Container $container, array $options = [])
     {
@@ -62,21 +53,6 @@ abstract class Queue
      * @return bool TRUE if the Message was retried, otherwise FALSE.
      */
     abstract public function fail(Message $message): bool;
-
-    /**
-     * Get the queue Listenesr.
-     *
-     * @return array The Listeners.
-     */
-    public function getListeners(): array
-    {
-        return $this->listeners ??= array_map(
-            fn(object|string $listener): object => is_string($listener) ?
-                $this->container->use($listener) :
-                $listener,
-            $this->config['listeners']
-        );
-    }
 
     /**
      * Pop the last message off the queue.
