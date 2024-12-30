@@ -283,6 +283,7 @@ use Fyre\Queue\Worker;
 
 - `$container` is a [*Container*](https://github.com/elusivecodes/FyreContainer).
 - `$queueManager` is a *QueueManager*.
+- `$eventManager` is an [*EventManager*](https://github.com/elusivecodes/FyreEvent).
 - `$options` is an array containing configuration options.
     - `config` is a string representing the configuration key, and will default to `QueueManager::DEFAULT`.
     - `queue` is a string representing the queue name, and will default to `QueueManager::DEFAULT`.
@@ -292,7 +293,7 @@ use Fyre\Queue\Worker;
     - `sleep` is a number representing the number of microseconds to sleep if no jobs are in the queue, and will default to *100000*.
 
 ```php
-$worker = new Worker($container, $queueManager, $options);
+$worker = new Worker($container, $queueManager, $eventManager, $options);
 ```
 
 **Run**
