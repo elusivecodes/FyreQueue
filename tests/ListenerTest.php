@@ -454,7 +454,7 @@ final class ListenerTest extends TestCase
     {
         $this->container = new Container();
         $this->container->singleton(Config::class);
-        $this->container->singleton(EventManager::class, fn(): EventManager => new EventManager());
+        $this->container->singleton(EventManager::class);
         $this->container->singleton(QueueManager::class);
 
         $this->container->use(Config::class)->set('Queue', [
