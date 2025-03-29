@@ -30,9 +30,11 @@ class QueueWorkerCommand extends Command
             'default' => Queue::DEFAULT,
         ],
         'maxJobs' => [
+            'as' => 'integer',
             'default' => 0,
         ],
         'maxRuntime' => [
+            'as' => 'integer',
             'default' => 0,
         ],
     ];

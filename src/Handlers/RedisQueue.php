@@ -29,6 +29,13 @@ class RedisQueue extends Queue
         'port' => 6379,
         'database' => null,
         'timeout' => 0,
+        'persist' => true,
+        'tls' => false,
+        'ssl' => [
+            'key' => null,
+            'cert' => null,
+            'ca' => null,
+        ],
     ];
 
     protected Redis $connection;
@@ -48,7 +55,25 @@ class RedisQueue extends Queue
         try {
             $this->connection = new Redis();
 
-            if (!$this->connection->connect($this->config['host'], (int) $this->config['port'], $this->config['timeout'])) {
+            $tls = $this->config['tls'] ? 'tls://' : '';
+
+            if (!$this->connection->connect(
+                $tls.$this->config['host'],
+                (int) $this->config['port'],
+                (int) $this->config['timeout'],
+                $this->config['persist'] ?
+                    ($this->config['port'].$this->config['timeout'].$this->config['database']) :
+                null,
+                0,
+                0,
+                [
+                    'ssl' => [
+                        'local_pk' => $this->config['ssl']['key'] ?? null,
+                        'local_cert' => $this->config['ssl']['cert'] ?? null,
+                        'cafile' => $this->config['ssl']['ca'] ?? null,
+                    ],
+                ],
+            )) {
                 throw QueueException::forConnectionFailed();
             }
 
