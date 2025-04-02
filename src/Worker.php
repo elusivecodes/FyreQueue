@@ -132,10 +132,9 @@ class Worker
         try {
             $this->dispatchEvent('Queue.start', ['message' => $message], false);
 
-            $instance = $this->container->build($config['className']);
-            $method = $config['method'];
+            $this->container->clearScoped();
 
-            $result = $this->container->call([$instance, $method], $config['arguments']);
+            $result = $this->container->call([$config['className'], $config['method']], $config['arguments']);
 
             if ($result === false) {
                 $retried = $this->queue->fail($message);
