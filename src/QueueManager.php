@@ -20,8 +20,6 @@ class QueueManager
 
     protected array $config = [];
 
-    protected Container $container;
-
     protected array $instances = [];
 
     /**
@@ -29,10 +27,10 @@ class QueueManager
      *
      * @param Container $container The Container;
      */
-    public function __construct(Container $container, Config $config)
-    {
-        $this->container = $container;
-
+    public function __construct(
+        protected Container $container,
+        Config $config
+    ) {
         $handlers = $config->get('Queue', []);
 
         foreach ($handlers as $key => $options) {

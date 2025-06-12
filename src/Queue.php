@@ -18,17 +18,16 @@ abstract class Queue
 
     protected array $config;
 
-    protected Container $container;
-
     /**
      * New Queue constructor.
      *
      * @param Container $container The Container;
      * @param array $options The queue options.
      */
-    public function __construct(Container $container, array $options = [])
-    {
-        $this->container = $container;
+    public function __construct(
+        protected Container $container,
+        array $options = []
+    ) {
         $this->config = array_replace(self::$defaults, static::$defaults, $options);
     }
 

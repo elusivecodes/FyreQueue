@@ -153,7 +153,7 @@ class RedisQueue extends Queue
         // check for delayed messages
         $this->connection->watch(static::prepareKey($queue, 'delayed'));
 
-        $itemsReady = $this->connection->zRangeByScore(static::prepareKey($queue, 'delayed'), 0, time());
+        $itemsReady = $this->connection->zRangeByScore(static::prepareKey($queue, 'delayed'), '0', (string) time());
 
         if ($itemsReady !== []) {
             $this->connection->multi();

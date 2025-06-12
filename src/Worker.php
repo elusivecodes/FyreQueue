@@ -36,8 +36,6 @@ class Worker
 
     protected array $config;
 
-    protected Container $container;
-
     protected int $jobCount = 0;
 
     protected array $listeners;
@@ -54,8 +52,12 @@ class Worker
      * @param EventManager $eventManager The EventManager.
      * @param array $options The worker options.
      */
-    public function __construct(Container $container, QueueManager $queueManager, EventManager $eventManager, array $options = [])
-    {
+    public function __construct(
+        protected Container $container,
+        QueueManager $queueManager,
+        protected EventManager $eventManager,
+        array $options = []
+    ) {
         $this->container = $container;
         $this->eventManager = $eventManager;
 
